@@ -34,12 +34,7 @@ setuptools.setup(
             'nbsphinx',
             'recommonmark',
             'graphviz']},
-    packages=['wfsim',
-              'wfsim.core',
-              'wfsim.pax_datastructure',
-              'extra_requirements'],
-    package_dir={'extra_requirements': 'extra_requirements'},
-    package_data={'extra_requirements': ['requirements-tests.txt']},
+    packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: BSD License',
