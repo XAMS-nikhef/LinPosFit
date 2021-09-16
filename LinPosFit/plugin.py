@@ -2,7 +2,7 @@ import strax
 import numpy as np
 import straxen
 
-from linposfit import *
+from .linposfit import *
 
 @strax.takes_config(
     strax.Option('n_top_pmts'),
