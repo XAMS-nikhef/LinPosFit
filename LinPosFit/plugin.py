@@ -2,6 +2,8 @@ import strax
 import numpy as np
 import straxen
 
+import sys
+
 from .LinPosFit import *
 
 @strax.takes_config(
@@ -34,8 +36,14 @@ class PeakPositionsLinFit(strax.Plugin):
                 res[ix]['time'] = p['time']
                 res[ix]['endtime'] = p['endtime']
                 continue
-            fit_result,_,_ = lpf_execute(self.pmt_pos[:self.config['n_top_pmts']],p['area_per_channel'][:self.config['n_top_pmts']],self.pmt_surface)
-
+            try:
+                #Some really small single electron s2s fail the minimization
+                fit_result,_,_ = lpf_execute(self.pmt_pos[:self.config['n_top_pmts']],p['area_per_channel'][:self.config['n_top_pmts']],self.pmt_surface)
+            except:
+                res[ix]['time'] = p['time']
+                res[ix]['endtime'] = p['endtime']
+                continue
+            
             res[ix]['time'] = p['time']
             res[ix]['endtime'] = p['endtime']
             res[ix]['xml'] = fit_result[0]

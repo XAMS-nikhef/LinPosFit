@@ -18,6 +18,7 @@ lpf_npar = 4 # number of fit parameters
 lpf_fix_par = np.array([False, False, False, False]) # which parameters to fix
 #
 debug = False
+print('OpenedLinPosFit')
 
 
 def lpf_execute(xhit, nhit, area_sensor):
@@ -188,6 +189,14 @@ def lpf_hit_prob(xi, ni, xf, r0, gamma):
     log_prob = ni*np.log(nexp) - nexp - log_nfac
     return log_prob
 
+
+#@njit
+def write_example_numba(mm):
+    f = open('/home/cfuselli/jobs/logs/array_m.npy', 'w')
+    np.save(f, mm)
+    f.close()
+
+
 @njit
 def lpf_minimize(xhit, nhit, area_sensor):
     """
@@ -269,7 +278,10 @@ def lpf_minimize(xhit, nhit, area_sensor):
             # print('lpf_minimize:: singular error matrix')
             break
         
-        minv = np.linalg.inv(m)
+        minv = np.linalg.inv(m)   
+
+        
+                
         # multiply with vector to get corrections to the current fit parameters
         #
         result = np.dot(minv, g)
