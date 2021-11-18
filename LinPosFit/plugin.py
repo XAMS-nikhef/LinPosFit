@@ -16,10 +16,27 @@ from straxen.itp_map import InterpolatingMap
 export, __all__ = strax.exporter()
 
 
+class PeakLinPosFit(strax.MergeOnlyPlugin):
+    """Merge peaks plugins into one"""
+    depends_on = ('peaks_positions_lin_fit', 'peaks_positions_initialize_lin_fit')
+    save_when = strax.SaveWhen.NEVER
+
+
+class EventLinPosFit(strax.MergeOnlyPlugin):
+    """Merge events plugins into one"""
+    depends_on = ('event_positions_lin_fit', 'event_positions_lin_fit_corr')
+    save_when = strax.SaveWhen.NEVER
+
+    
+
 @strax.takes_config(
     strax.Option('n_top_pmts'),
     strax.Option('pmt_to_lxe',default=7,help='Distance between the PMTs and the liquid interface'))
 class PeakPositionsLinFit(strax.Plugin):
+    """
+    Computes S2 position with linearized log-likelihood fit. 
+    Returns xy position and the parameters of the fit.
+    """
     depends_on=('peaks','peak_basics')
     rechunk_on_save=False
     dtype= [('xml',np.float),
@@ -70,6 +87,10 @@ class PeakPositionsLinFit(strax.Plugin):
 
 @strax.takes_config(strax.Option('n_top_pmts'))
 class PeakClustering(strax.Plugin):
+    """
+    Work in progress. 
+    Returns the number of clusters in a peak
+    """
     depends_on=('peaks','peak_basics')
     rechunk_on_save=False
     dtype= [('n_cluster',np.int)]
@@ -103,6 +124,10 @@ class PeakClustering(strax.Plugin):
     strax.Option('n_top_pmts'),
     strax.Option('pmt_to_lxe',default=7,help='Distance between the PMTs and the liquid interface'))
 class PeakPositionsInitializeLinFit(strax.Plugin):
+    """
+    Computes the initial xy position used in LinPosFit. 
+    It's (when possible) the center of gravity of the hits in the PMTs. 
+    """
     depends_on=('peaks','peak_basics')
     rechunk_on_save=False
     dtype= [('x_00',np.float),
@@ -154,7 +179,9 @@ class PeakPositionsInitializeLinFit(strax.Plugin):
 
     
 class EventPositionsLinFit(strax.LoopPlugin):
-    """Loop over events and find the peaks within each of those events."""
+    """
+    Loop over events and find the S2 peak with greatest area within each of those events.
+    """
     __version__="1.0.15"
     
     depends_on = 'event_info', 'peak_basics', 'peak_positions_lin_fit' 
@@ -213,11 +240,9 @@ class EventPositionsLinFit(strax.LoopPlugin):
 )
 class EventPositionsLinFitCorr(strax.Plugin):
     """
-    Computes the observed and corrected position for the main S1/S2
-    pairs in an event. For XENONnT data, it returns the FDC corrected
-    positions of the default_reconstruction_algorithm. In case the fdc_map
-    is given as a file (not through CMT), then the coordinate system
-    should be given as (x, y, z), not (x, y, drift_time).
+    Computes the corrected position for the main S2
+    peak in an event. 
+    It is copied from class EventPositions(strax.Plugin)
     """
 
     depends_on = ('event_info', 'event_positions_lin_fit')
