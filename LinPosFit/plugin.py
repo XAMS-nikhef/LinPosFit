@@ -9,7 +9,11 @@ import numpy as np
 import numba
 import straxen
 from warnings import warn
-from straxen.plugins.position_reconstruction import DEFAULT_POSREC_ALGO_OPTION
+try:
+    from straxen.plugins.position_reconstruction import DEFAULT_POSREC_ALGO_OPTION
+except:
+    from straxen.plugins.position_reconstruction import DEFAULT_POSREC_ALGO as DEFAULT_POSREC_ALGO_OPTION
+    
 from straxen.common import pax_file, get_resource, first_sr1_run, pre_apply_function
 from straxen.get_corrections import get_correction_from_cmt, get_cmt_resource, is_cmt_option
 from straxen.itp_map import InterpolatingMap
@@ -213,7 +217,13 @@ class EventPositionsLinFit(strax.LoopPlugin):
             
         return result 
 
+
     
+    
+'''
+    
+####### This need an ad hoc map
+
 @export    
 @strax.takes_config(
     strax.Option(
@@ -314,3 +324,6 @@ class EventPositionsLinFitCorr(strax.Plugin):
                        })
 
         return result
+        
+    
+'''
