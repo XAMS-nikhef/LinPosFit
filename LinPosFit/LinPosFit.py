@@ -672,8 +672,8 @@ def lpf_event_display(xhit, nhit, fit_result, hit_is_used, xiter, **kwargs):
     # reconstructed position
     # if abs(self.fdata['xr']) < 100:
     ax0.plot(fit_result[0], fit_result[1], 'wo', markersize=10)
-    ax0.set_xlabel('x (mm)', fontsize=18)
-    ax0.set_ylabel('y (mm)', fontsize=18)
+    ax0.set_xlabel('x (cm)', fontsize=18)
+    ax0.set_ylabel('y (cm)', fontsize=18)
     ax0.set_xlim([plot_range[0][0],plot_range[0][1]])
     ax0.set_ylim([plot_range[1][0],plot_range[1][1]])
     plt.show()
