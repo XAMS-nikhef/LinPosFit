@@ -199,12 +199,15 @@ def cluster_plot(optimum, hits):
             cluster_points = np.asarray(np.where(np.asarray(kmeans.labels_) == i))[0]
             for j in cluster_points:
                 circle = plt.Circle((list_pmt[j][0], list_pmt[j][1]), np.sqrt(list_hits[j])/10, color=colors[i], fill=False)
+                circle2 = plt.Circle((list_pmt[j][0], list_pmt[j][1]), 1, fc=colors[i], ec=None, alpha=0.3)
+
                 ax.add_patch(circle)
+                ax.add_patch(circle2)
 
         plt.scatter(pmt_pos[:, 0], pmt_pos[:, 1], s=1)
         plt.xlim(-100,100)
-        plt.xlabel("x(mm)")
-        plt.ylabel("y(mm)")
+        plt.xlabel("x(cm)")
+        plt.ylabel("y(cm)")
         plt.ylim(-100,100)       
     
     except TypeError:
